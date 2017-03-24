@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AlphaChange</title>
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body>
+    <div style="text-align: center;margin-top: 100px;">
+        <canvas id="canvas" width="640" height="480">
+            Your Browser is not support HTML5 Canvas!
+        </canvas>
+    </div>
+</body>
+<script type="text/javascript" src="cometcursor.js"></script>
+<script type="text/javascript">
+
+/**
+ * 案例
+ */
+window.addEventListener("load", canvasApp, false);
+
+function canvasApp() {
+    if (!supportCanvas) {
+        return;
+    }
+    var canvasDom = document.getElementById("canvas");
+    var ctx = canvasDom.getContext("2d");
+    var canvasImgObj = new Image();
+    canvasImgObj.src = "img/hello.png";
+    var alpha = 0;
+    var fadeIn = true;
+    function drawBackground() {
+        //背景
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0, 0, 640, 480);
+
+        //图像
+
+        ctx.globalAlpha = .5;
+        ctx.drawImage(canvasImgObj,250,80);
+
+        //文字
+        ctx.font="72px Sans-Serif";
+        ctx.textBaseline = "top";
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = "#fff";
+        ctx.fillText("Hello World",150,200);
+
+        if (fadeIn) {
+            alpha += .005;
+            if (alpha>=1) {
+                alpha=1;
+                fadeIn = false;
+            }
+        }else{
+            alpha -= .01;
+            if (alpha<0) {
+                alpha = 0;
+                fadeIn = true;
+            }
+        }
+
+    }
+    function gameLoop(){
+        window.setTimeout(gameLoop,20);
+        drawBackground();
+    }
+    gameLoop();
+}
+
+function supportCanvas() {
+    return !!document.createElement("canvas").getContext();
+}
+</script>
+
+</html>

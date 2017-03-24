@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Guess Word!</title>
+    <style type="text/css">
+    .contain {
+        text-align: center;
+        margin-top: 100px;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="contain">
+        <canvas id="canvasOne" width="500" height="300">
+            Your Browser is not support HTML5 Application!
+        </canvas>
+    </div>
+
+    <form>
+        <input type="button" name="createImgObj" id="createImgData" value="Export Canvas Image">
+    </form>
+</body>
+<script type="text/javascript">
+/**
+ *
+ *猜文字的游戏：
+ *
+ * 系统随机生成一个字母： 让玩家去猜
+ *
+ *
+ *如果答对了： 那么游戏就结束 、如果没有答对那么系统会提醒   在离A更近 还是 离Z更近
+ *
+ *
+ * 需要的变量  ：  猜的次数、猜过的字母，猜的结果，提示的结果
+ *
+ *
+ */
+
+/**
+ * 玩家猜的次数
+ * @type {Number}
+ */
+var guesses = 0;
+/**
+ * 提示信息 【教程】
+ * @type {String}
+ */
+var guessMsg = "Guess the letter from a to z";
+/**
+ * 被猜的字母数组
+ * @type {Array}
+ */
+var letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+/**
+ * [today 时间]
+ * @type {Date}
+ */
+var today = new Date();
+/**
+ * [letterToGuess 被猜的字母（随机）]
+ * @type {String}
+ */
+var letterToGuess = "";
+/**
+ * [higherOrLower 提示玩家猜的范围]
+ * @type {String}
+ */
+var higherOrLower = "";
+/**
+ *  玩家猜字母的集合
+ */
+var lettersGuessed = [];
+/**
+ * [gameOver 游戏是否结束]
+ * @type {Boolean}
+ */
+var gameOver = false;
+var theCanvas;
+//加载前提
+//html加载完成的时候   对window添加事件执行canvas动画事件
+window.addEventListener("load", canvasLoadEvent, false);
+//调试工具
+//调试工具的兼容性方案
+var Debugger = function() {};
+Debugger.log = function(message) {
+    try {
+        console.log(message);
+    } catch (ex) {
+        return;
+    }
+}
+
+// 判断是否支持canvas
+function canvasSupport() {
+    return !!document.createElement("canvas").getContext();
+}
+
+//canvas主要逻辑
+function canvasLoadEvent() {
+    //初始化游戏
+    initGame();
+}
+
+function initGame() {
+    //随机取出一个字母，然后将字母放到对应的容器中
+    var letterIndex = Math.floor(Math.random() * letters.length);
+    letterToGuess = letters[letterIndex];
+    drawBackground();
+    window.addEventListener("keydown", eventKeyPressed, true);
+}
+
+function eventKeyPressed(e) {
+    if (!gameOver) {
+        var letterPressed = String.fromCharCode(e.keyCode);
+
+        letterPressed = letterPressed.toLowerCase();
+        guesses++;
+
+        Debugger.log("letterPressed       ============" + letterToGuess);
+        if (letterPressed == letterToGuess) {
+            gameOver = true;
+        } else {
+
+            letterIndex = letters.indexOf(letterToGuess);
+            var guessIndex = letters.indexOf(letterPressed);
+            Debugger.log("guessIndex : " + guessIndex);
+            if (guessIndex < 0) {
+                higherOrLower = "请按字母，不要按其他的按键";
+            } else if (guessIndex > letterIndex) {
+                lettersGuessed.push(letterPressed);
+                higherOrLower = "Lower";
+            } else {
+                lettersGuessed.push(letterPressed);
+                higherOrLower = "Higher";
+            }
+        }
+        drawBackground();
+    }
+}
+
+/**
+ * [drawBackground 绘画]
+ * @AuthorHTL
+ * @DateTime  2017-03-17T12:36:35+0800
+ * @return    {[type]}                 [description]
+ */
+function drawBackground() {
+    if (!canvasSupport) {
+        return;
+    }
+     theCanvas = document.getElementById("canvasOne");
+
+    var ctx = theCanvas.getContext("2d");
+    Debugger.log("begin drawing......");
+    //画背景
+    ctx.fillStyle = "#ffffaa";
+    ctx.fillRect(0, 0, 500, 300);
+    //画边线
+    ctx.strokeStyle = "#000";
+    ctx.strokeRect(5, 5, 490, 290);
+
+    ctx.textBaseline = "top";
+    //  日期
+    ctx.fillStyle = "#000";
+    ctx.font = "10px Sans-Serif";
+    ctx.fillText(today, 120, 10);
+
+    // 消息
+    ctx.fillStyle = "#f00";
+    ctx.font = "16px Sans-Serif";
+    ctx.fillText(guessMsg, 150, 30);
+
+    //猜的次数
+    ctx.fillStyle = "#109910";
+    ctx.font = "14px Sans-Serif";
+    ctx.fillText("Guesses:" + guesses, 218, 50);
+
+    //显示 Higher or  Lower
+    ctx.fillStyle = "#000";
+    ctx.font = "16px Sans-Serif";
+    ctx.fillText("Higher or Lower: " + higherOrLower, 70, 80);
+
+    //显示已经猜过的字母
+    ctx.fillStyle = "#1B3954";
+    ctx.font = "16px Sans-Serif";
+    ctx.fillText("Letter Guessed : " + lettersGuessed.toString(), 10, 260);
+
+    if (gameOver) {
+        ctx.fillStyle = "f00";
+        ctx.font = "40px _sans-serif";
+        ctx.fillText("恭喜 你已经猜到了！", 100, 140);
+    }
+}
+
+
+/**
+ * [导出Canvas图片： 相当于游戏截图]
+ * @AuthorHTL
+ * @DateTime  2017-03-17T15:19:53+0800
+ * @param     {[type]}                 ){} [description]
+ * @return    {[type]}                       [description]
+ */
+
+var exportImgObj  = document.getElementById("createImgData");
+exportImgObj.addEventListener("click",createImgButtonPressed,false);
+function createImgButtonPressed(e){
+    window.open(theCanvas.toDataURL(),"canvasImage","left=0,top=0,width="+theCanvas.width+",height="+theCanvas.height+",toolbar=0,resizable=0");
+}
+</script>
+
+</html>

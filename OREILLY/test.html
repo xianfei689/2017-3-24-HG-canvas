@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <style type="text/css">
+    .div {
+        text-align: center;
+        margin-top: 50px;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="div">
+        <canvas id="canvas" width="500" height="300">
+            Your Browser is not support HTML5 Application！
+        </canvas>
+    </div>
+</body>
+<script type="text/javascript">
+var Debugger = function() {};
+Debugger.log = function(message) {
+    try {
+        console.log(message);
+    } catch (exception) {
+        return;
+    }
+}
+
+var supportCanvas = function() {
+    return !!document.createElement("canvas").getContext();
+}
+window.addEventListener("load", drawBackground, false);
+
+function drawBackground() {
+    if (!supportCanvas) {
+        return;
+    }
+    var dom = document.getElementById("canvas");
+    var ctx = dom.getContext("2d");
+    Debugger.log("Drawing ing .....");
+    //画背景
+    ctx.fillStyle = "#ffffaa";
+    ctx.fillRect(0, 0, 500, 300);
+    //画边线
+    ctx.strokeRect(5,5,490,290);
+    //画图片
+    var imgObj = new Image();
+    imgObj.src="img/hello.png";
+    imgObj.onload = function(){
+        ctx.drawImage(imgObj,190,120);
+    }
+    //画文字
+    ctx.fillStyle = "red";
+    ctx.font="25px sans-Serif";
+    ctx.textBaseline ="top";
+    ctx.fillText("Hello World",180,50);
+
+    Debugger.log("Drawing  end ..........");
+}
+</script>
+
+</html>
