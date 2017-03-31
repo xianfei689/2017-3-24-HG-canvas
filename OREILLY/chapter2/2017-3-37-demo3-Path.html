@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Path</title>
+</head>
+
+<body>
+    <div style="margin-top: 100px;text-align: center;">
+        <canvas id="canvas" width="500" height="500" style="background-color: green;"> Your Bowser is not Support Canvas!</canvas>
+    </div>
+</body>
+<script type="text/javascript">
+window.addEventListener("load", canvasApp, false);
+
+function isSupportCanvas() {
+    return !!document.createElement("canvas").getContext;
+}
+
+function canvasApp() {
+    if (!isSupportCanvas) {
+        return;
+    }
+    drawScreen();
+
+    function drawScreen() {
+        var ctx = document.getElementById("canvas").getContext("2d");
+        //stst
+        ctx.strokeStyle = "red";
+        //liwi
+        ctx.lineWidth = "10";
+        //lic  设置返回线条末端的样式  【默认、圆形。正方形】
+        ctx.lineCap = "butt";
+        //bepa
+        ctx.beginPath();
+        //lijo
+        ctx.lineJoin = "round";
+        //mot
+        ctx.moveTo(20, 20);
+        //lit
+        ctx.lineTo(100, 60);
+        ctx.lineTo(20, 100);
+        //st
+        ctx.stroke();
+        //clp
+        ctx.closePath();
+    }
+}
+</script>
+
+</html>

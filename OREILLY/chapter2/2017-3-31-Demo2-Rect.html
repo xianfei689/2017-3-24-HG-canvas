@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>基本矩形</title>
+</head>
+<body>
+        <div style="margin-top: 100px;text-align: center;">
+              <canvas id="canvas" width="500" height="500" style="background-color: green">
+                  Your Bowser is not Support Canvas !
+              </canvas>
+        </div>
+</body>
+<script type="text/javascript">
+window.addEventListener("load",canvasApp,false);
+
+function canvasApp(){
+    if (!isSupportCanvas) {
+        return;
+    }
+    drawScreen();
+}
+function isSupportCanvas(){
+    return !!document.createElement("canvas").getContext;
+}
+function drawScreen(){
+  var ctx = document.getElementById("canvas").getContext("2d");
+  //fist
+  ctx.fillStyle = "#000";
+  //stst
+  ctx.strokeStyle = "red";
+  //liwi
+  ctx.lineWidth = "2";
+  //fire
+  ctx.fillRect(10, 10, 40, 40);
+  //stre
+  ctx.strokeRect(0, 0, 60, 60);
+  //clre
+  ctx.clearRect(20, 20, 20, 20);
+}
+
+</script>
+</html>

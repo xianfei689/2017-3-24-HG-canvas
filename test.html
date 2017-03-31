@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+    .toggle{
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 30px;
+        border: 1px solid #E5E5E5;
+        background-color: #fff;
+        background-clip: content-box;
+        -webkit-border-radius:30px;
+        border-radius: 30px;
+    }
+    .toggle i{
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: inline-block;
+        content: "";
+        width: 30px;
+        height: 30px;
+        -webkit-box-shadow:0 0 2px #bbb;
+        background-color: #fff;
+        background-clip: content-box;
+        -webkit-border-radius:100%;
+        border-radius: 100%;
+        -webkit-transition:300ms linear;
+        transition:300ms linear;
+        -webkit-transform:translate3D(0,0,0);
+        transform:translate3D(0,0,0);
+    }
+    .toggle.on{
+        border-color: #4089e8;
+        background-color: #4089e8;
+    }
+    .toggle.on i{
+        -webkit-transform:translate3D(30px,0,0);
+        transform:translate3D(30px,0,0);
+    }
+    </style>
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+    $(function () {
+        $('#test').bind("click",function(){
+            var target = $(this);
+            if (target.hasClass("on")) target.removeClass("on");
+            else target.addClass("on");
+        });
+    });
+    </script>
+</head>
+<body>
+    <span id="test" class="toggle"><i></i></span>
+</body>
+
+</html>

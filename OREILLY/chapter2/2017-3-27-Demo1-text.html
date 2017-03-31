@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <div style="text-align: center;margin-top: 100px;">
+        <canvas id="canvas" width="500" height="500" >
+            Your Borwser is not support Canvas!
+        </canvas>
+    </div>
+</body>
+<script type="text/javascript">
+/**
+ * [Canvas  基本用法]
+ * @AuthorHTL                          {{Mundo                Tomo Zhou}}
+ * @Email                              {{zhou0425@gmail.com}}
+ * @DateTime  2017-03-31T10:44:54+0800
+ * @return    {[type]}                 [description]
+ */
+var eventWindowLoad = function() {
+    if (!isSupportCanvas) {
+        return;
+    }
+    var dom = document.getElementById("canvas");
+    var ctx = dom.getContext("2d");
+    drawScreen();
+    function drawScreen(){
+      //draw  fist
+      ctx.fillStyle = "#aaa";
+      //fire
+      ctx.fillRect(0, 0, 200, 200);
+      //firt
+      ctx.fillStyle = "#000";
+      //fo
+      ctx.font = "20px _sans";
+      //teba
+      ctx.textBaseline = "top";
+      //fite  fit
+      ctx.fillText("Canvas", 0, 0);
+    }
+}
+var isSupportCanvas = function() {
+    return !!document.createElement("canvas").getContext;
+}
+window.addEventListener("load", eventWindowLoad, false);
+</script>
+
+</html>

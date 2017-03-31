@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Arc</title>
+</head>
+
+<body>
+    <div style="margin-top: 100px;text-align: center;">
+        <canvas id="canvas" height="800" width="800" style="background-color: green;">
+            Your browser is not support Canvas!
+        </canvas>
+    </div>
+</body>
+<script type="text/javascript">
+window.addEventListener("load", canvasApp, false);
+
+function isSupportCanvas() {
+    return !!document.createElement("canvas").getContext;
+}
+
+function canvasApp() {
+    if (!isSupportCanvas) {
+        return;
+    }
+    drawScreen();
+
+    function drawScreen() {
+        var ctx = document.getElementById("canvas").getContext("2d");
+        /**
+         * x,y : 圆心位置
+         * radius:弧度半径
+         * startAngle/endAngle:使用弧度值，而不是角度值
+         * anticlockwise:定义弧度方向【是否为逆时针】
+         */
+        //ctx.arc(x,y,radius,startAngle,endAngle,anticlockwise)
+        // ctx.beginPath();
+        // ctx.strokeStyle = "black";
+        // ctx.lineWidth = "5";
+        // ctx.arc(100, 100, 20, (Math.PI / 180) * 0, (Math.PI / 180) * 360, false);
+        // ctx.stroke();
+        // ctx.closePath();
+
+        // ctx.beginPath();
+        // ctx.arc(100, 200, 20, (Math.PI / 180) * 0, (Math.PI / 180) * 90, false);
+        // ctx.stroke();
+        // ctx.closePath();
+
+        // ctx.beginPath();
+        // ctx.arc(100, 300, 20, 0, (Math.PI / 180) * 90, true);
+        // ctx.stroke();
+        // ctx.closePath();
+
+
+
+
+
+        // ctx.beginPath();
+
+        // ctx.moveTo(0, 0);
+        // ctx.lineTo(100, 200);
+        // ctx.arcTo(350, 350, 100, 100, 20);
+
+        // ctx.stroke();
+        // ctx.closePath();
+
+
+
+        var x0 = 100,
+            y0 = 400,
+            x1 = 500,
+            y1 = 400,
+            x2 = 450,
+            y2 = 450;
+        ctx.beginPath();
+        ctx.moveTo(x0, y0);
+        ctx.strokeStyle = "#f00";
+        ctx.lineWidth = 2;
+        ctx.arcTo(x1, y1, x2, y2, 20);
+        ctx.stroke();
+
+
+        ctx.beginPath();
+        ctx.strokeStyle = "rgba(0,0,0,0.5)";
+        ctx.lineWidth = 1;
+        ctx.moveTo(x0, y0);
+        //很好的调试方法
+        ctx.fillText("x0,y0", x0+10, y0+10);
+        ctx.lineTo(x1, y1);
+        ctx.fillText('x1,y1', x1 + 10, y1 + 10)
+        ctx.lineTo(x2, y2);
+        ctx.fillText('x2,y2', x2 + 10, y2)
+        ctx.stroke();
+
+
+    }
+}
+</script>
+
+</html>

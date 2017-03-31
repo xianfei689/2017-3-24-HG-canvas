@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style type="text/css">
+    body {
+        overflow-x: hidden;
+    }
+
+    ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+    }
+
+    .header {
+        font-weight: 18px;
+        color: red;
+        height: 100px;
+        line-height: 100px;
+        text-align: center;
+    }
+
+    .cho_link {
+    }
+
+    .cho_search {
+        width: 170px;
+        margin-right: -20px;
+        padding-right: 20px;
+        *vertical-align: -2px;
+    }
+
+    .cho_box {
+        border: 1px solid #bfbfbf;
+        background-color: #ebebeb;
+        *position: relative;
+        overflow-y: hidden;
+    }
+
+    .cho_line {
+        display: block;
+        padding-top: 2px;
+        background-color: #d2d2d2;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .cho_left {
+        width: 20%;
+        margin-right: 10px;
+        float: left;
+        position: relative;
+    }
+
+    .cho_menu {
+        padding-bottom: 72px;
+        padding-top: 1px;
+    }
+
+    .cho_link,
+    .cho_link_on {
+        display: block;
+        line-height: 32px;
+        padding-left: 19px;
+        color: #333;
+        *zoom: 1;
+    }
+
+    .cho_link {
+        background-color: #fafafa;
+        border-bottom: 1px solid #f6f6f6;
+        outline: none;
+    }
+
+    .cho_link:hover {
+        background: #f6f6f6;
+        border-bottom: 1px solid #e0e0e0;
+        text-decoration: none;
+    }
+
+    .cho_link_on {
+        margin: -1px -1px 0 0;
+        background: #ebebeb;
+        border-bottom: 1px solid #ccc;
+        border-top: 1px solid #ccc;
+        position: relative;
+        cursor: default;
+    }
+
+    .cho_link_on:first-child {
+        border-top: 0;
+    }
+
+    .cho_link_on:hover {
+        text-decoration: none;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="header">head</div>
+    <div class="center">
+        <!-- 左边的选菜项 -->
+        <div class="cho_left">
+            <ul id="choMenu" class="rel cho_menu">
+                <li><a href="ajax.aspx?area=pudong" class="cho_link cho_link_on">浦东区</a></li>
+                <li><a href="ajax.aspx?area=baoshan" class="cho_link">宝山区</a></li>
+                <li><a href="ajax.aspx?area=jiading" class="cho_link ">嘉定区</a></li>
+                <li><a href="ajax.aspx?area=qingpu" class="cho_link">青浦区</a></li>
+                <li><a href="ajax.aspx?area=minhang" class="cho_link">闵行区</a></li>
+                <li><a href="ajax.aspx?area=putuo" class="cho_link">普陀区</a></li>
+                <li><a href="ajax.aspx?area=jinshan" class="cho_link">金山区</a></li>
+                <li><a href="ajax.aspx?area=songjiang" class="cho_link">松江区</a></li>
+                <li><a href="ajax.aspx?area=zhabei" class="cho_link">闸北区</a></li>
+                <li><a href="ajax.aspx?area=fengxian" class="cho_link">奉贤区</a></li>
+                <li><a href="ajax.aspx?area=huangpu" class="cho_link">黄浦区</li>
+                <li><a href="ajax.aspx?area=changning" class="cho_link">长宁区</a></li>
+                <li><a href="ajax.aspx?area=jingan" class="cho_link">静安区</a></li>
+                <li><a href="ajax.aspx?area=zhoubian" class="cho_link">上海周边</a></li>
+            </ul>
+        </div>
+        <!-- 右侧主列表 -->
+        <div class="cell">
+            <div id="listBox">
+                右侧显示相应的内容
+            </div>
+        </div>
+    </div>
+    <div class="header">footer</div>
+</body>
+ <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+//给每个左侧链接绑定事件
+var eleMenus = $("#choMenu a").bind("click", function(event) {
+    //获得querystring的值
+    var title = "";
+    var query = this.href.split("?")[1];
+    //将左侧列表链接全部去掉高亮
+    $("#choMenu a").removeClass('cho_link_on');
+    //给当前点击的链接加高亮
+    $(this).addClass('cho_link_on');
+    //如果存在history.pushState状态  且有queryString的值
+    if (history.pushState && query) {
+        var curText = $(this).text();
+        //给右侧内容框赋值
+        $('#listBox').text(curText);
+        // history处理
+
+        title = "history demo-" + curText;
+        if (event && /\d/.test(event.button)) {
+            //history.pushState使得页面的URL地址变化了
+            history.pushState({
+                title: title
+            }, title, location.href.split("?")[0] + "?" + query);
+        }
+    }
+    return false;
+});
+
+var fnHashTrigger = function(target) {
+    var query = location.href.split("?")[1],
+        eleTarget = target || null;
+    //页面首次载入，没有queryString的值
+    if (typeof query == "undefined") {
+        if (eleTarget = eleMenus.get(0)) {
+            // 如果没有查询字符，则使用第一个导航元素的查询字符内容
+            history.replaceState(null, document.title, location.href.split("#")[0] + "?" + eleTarget.href.split("?")[1]) + location.hash;
+            fnHashTrigger(eleTarget);
+        }
+    } else {
+        eleMenus.each(function() {
+            if (eleTarget === null && this.href.split("?")[1] === query) {
+                eleTarget = this;
+            }
+        });
+
+        if (!eleTarget) {
+            // 如果查询序列没有对应的导航菜单，去除查询然后执行回调
+            history.replaceState(null, document.title, location.href.split("?")[0]);
+            fnHashTrigger();
+        } else {
+            $(eleTarget).trigger("click");
+        }
+    }
+};
+
+if (history.pushState) {
+    //页面无刷新的，原先ajax请求的数据加载过来了  这就是popstate事件的作用
+    window.addEventListener("popstate", function() {
+        fnHashTrigger();
+    });
+
+    // 默认载入
+    fnHashTrigger();
+}
+</script>
+
+</html>
+
+
+
+<!-- 引入history.pushState的来龙去脉
+history.pushState
+history.replaceState
+history.state
+window.onpopstate事件
+实例Demo
+浏览器支持情况
+回到顶部
+引入history.pushState的来龙去脉
+
+大家都知道web2.0以来，大家都喜欢使用ajax来请求数据，提高用户体验，但是传统的ajax可以无刷新改变页面内容，但无法改变页面URL，无刷新的改变页面内容而url没有改变导致搜索引擎无法抓取改变的页面内容。
+
+为了提高可访问性，大家想了各种方法，比如说改变URL的hash，但是hash的方式不能很好的处理浏览器的前进、后退，为了能够区分不同的hash，浏览器引入了onhashchange事件，但并在所有浏览器都支持onhashchange，对于不支持onhashchange事件的浏览器只能通过定时去判断hash是否改变，而且搜索引擎不会理会井号，因此也就无法索引内容，这种方式显然不够灵活。
+
+为此twitter和google约定了使用#!xxx（即hash第一个字符为!），引用了新的方式#!之后搜索引擎必须加以支持，比如说网址是http://example.com#!1,当搜索引擎发现上述网址是会自动解析成http://example.com?_escaped_fragment_=1，但是这种方式对用户来说使用起来相当麻烦。
+
+这时HTML5为了解决传统ajax带来的问题引入了新的API，即：history.pushState, history.replaceState
+
+回到顶部
+history.pushState
+
+pushState是将指定的URL添加到浏览器历史里,存储当前历史记录点
+
+
+
+API:history.pushState(state, title, url)
+
+// @state状态对象：记录历史记录点的额外对象，可以为空
+// @title页面标题：目前所有浏览器都不支持
+// @url可选的url：浏览器不会检查url是否存在，只改变url，url必须同域，不能跨域
+
+
+history.pushState的目的
+
+SEO优化
+更少的数据请求
+更好的用户体验
+
+
+回到顶部
+history.replaceState
+
+replaceState是将指定的URL替换当前的URL,替换当前历史记录点
+
+replaceState的api和pushState类似，不同之处在于replaceState不会在window.history里新增历史记录点，而pushState会在历史记录点里新增一个记录点的
+
+
+
+回到顶部
+history.state
+
+当前URL下对应的状态信息。如果当前URL不是通过pushState或者replaceState产生的，那么history.state是null。
+
+state对象虽然可以存储很多自定义的属性，但对于不可序列化的对象则不能存储
+
+
+
+回到顶部
+window.onpopstate事件
+
+window.onpopstate事件主要是监听历史记录点，也就是说监听URL的变化，但会忽略URL的hash部分。
+
+history.go和history.back（包括用户按浏览器历史前进后退按钮）触发，并且页面无刷的时候（由于使用pushState修改了history）会触发popstate事件，事件发生时浏览器会从history中取出URL和对应的state对象替换当前的URL和history.state。通过event.state也可以获取history.state。
+
+注意点：
+
+javascript脚本执行window.history.pushState和window.history.replaceState不会触发onpopstate事件。
+谷歌浏览器和火狐浏览器在页面第一次打开的反应是不同的，谷歌浏览器奇怪的是回触发onpopstate事件，而火狐浏览器则不会。
+
+
+ 代码大家可以复制过去自己试一下，代码实现的功能是页面的跳转（前进后退，点击等）不重新请求页面，但是会相应改变右侧区域的内容且url改变了，而且可以通过无刷新的请求回退状态，真的是无限级的提高了用户友好性。
+  -->
